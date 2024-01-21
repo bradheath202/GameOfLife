@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct WorldView: View {
     @State private var cells: [[Bool]]
@@ -13,7 +14,9 @@ struct WorldView: View {
     
     var gridDimension: Int
     
-    init(gridDimension: Int = 40) {
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(gridDimension: Int = 25) {
         self.gridDimension = gridDimension
         cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
     }
@@ -25,7 +28,7 @@ struct WorldView: View {
                 HStack(spacing: 1) {
                     ForEach(0..<gridDimension, id: \.self) { column in
                         CellView(isAlive: $cells[row][column])
-                            .frame(width: cellSize, height: cellSize)
+//                            .frame(width: cellSize, height: cellSize)
                     }
                 }
             }
@@ -43,6 +46,14 @@ struct WorldView: View {
                 }
                 .padding(10)
                 Spacer()
+//                Button("▶️") {
+//                     startTimerProgression()
+//                }
+//                .padding(10)
+//                Button("⏹️") {
+//                     stopTimerProgression()
+//                }
+//                .padding(10)
                 Button("Step Forward") {
                     stepForward()
                 }
@@ -50,12 +61,17 @@ struct WorldView: View {
             }
             
         }
-        .aspectRatio(1.0, contentMode: .fit)
+        .aspectRatio(0.85, contentMode: .fit)
+        .onAppear {
+            cells = createRandomCells(gridDimension: gridDimension)
+        }
     }
     
     private var cellSize: CGFloat {
         let screenWidth = UIScreen.main.bounds.width
-        return screenWidth / CGFloat(gridDimension)
+        let padding = 1 // Adjust as needed
+        
+        return (screenWidth - CGFloat(padding * 2)) / CGFloat(gridDimension)
     }
     
     private func stepForward() {
@@ -111,6 +127,20 @@ struct WorldView: View {
         }
         
         return randomCells
+    }
+    
+    private mutating func startTimerProgression() {
+//        Timer.publish(every: 0.5, on: .main, in: .common)
+//            .autoconnect()
+//            .sink { [self] _ in
+//                self.stepForward()
+//            }
+//            .store(in: &cancellables)
+        
+    }
+    
+    private mutating func stopTimerProgression() {
+        cancellables.removeAll()
     }
 }
 
