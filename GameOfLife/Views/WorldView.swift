@@ -10,9 +10,11 @@ import SwiftUI
 struct WorldView: View {
     let gridDimension = 20
     @State private var cells = Array(repeating: Array(repeating: false, count: 20), count: 20)
+    @State private var generation = 0
     
     var body: some View {
         VStack(spacing: 1) {
+            Text("Generation: \(generation)").padding(10)
             ForEach(0..<gridDimension, id: \.self) { row in
                 HStack(spacing: 1) {
                     ForEach(0..<gridDimension, id: \.self) { column in
@@ -22,7 +24,7 @@ struct WorldView: View {
             }
             HStack {
                 Button("Reset") {
-                    // TODO:
+                    cells = Array(repeating: Array(repeating: false, count: 20), count: 20)
                 }
                 .padding(10)
                 Spacer()
@@ -41,7 +43,7 @@ struct WorldView: View {
         for row in 0..<gridDimension {
             for column in 0..<gridDimension {
                 let adjacentCellCount = adjacentCellCountForRow(row, andColumn: column)
-                if cells[row][column] { // cell is "alive"
+                if cells[row][column] { // cell is alive
                     if adjacentCellCount < 2 || adjacentCellCount > 3 {
                         newCells[row][column] = false // cell is dead
                     }
@@ -54,6 +56,7 @@ struct WorldView: View {
         }
         
         cells = newCells
+        generation += 1
     }
     
     private func adjacentCellCountForRow(_ row: Int, andColumn column: Int) -> Int {
