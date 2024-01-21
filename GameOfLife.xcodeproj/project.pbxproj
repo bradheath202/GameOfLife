@@ -15,6 +15,7 @@
 		4550EEEE2B5CD03700EB8101 /* GameOfLifeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550EEED2B5CD03700EB8101 /* GameOfLifeUITestsLaunchTests.swift */; };
 		4550EEFB2B5CD04900EB8101 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550EEFA2B5CD04900EB8101 /* CellView.swift */; };
 		4550EEFE2B5CD11700EB8101 /* WorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550EEFD2B5CD11700EB8101 /* WorldView.swift */; };
+		45D2C4992B5DA0F80018FBD9 /* WorldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D2C4982B5DA0F80018FBD9 /* WorldViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		4550EEED2B5CD03700EB8101 /* GameOfLifeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOfLifeUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4550EEFA2B5CD04900EB8101 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		4550EEFD2B5CD11700EB8101 /* WorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldView.swift; sourceTree = "<group>"; };
+		45D2C4982B5DA0F80018FBD9 /* WorldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		4550EECF2B5CD03600EB8101 /* GameOfLife */ = {
 			isa = PBXGroup;
 			children = (
+				45D2C4972B5DA0EB0018FBD9 /* ViewModels */,
 				4550EEFC2B5CD0F300EB8101 /* Views */,
 				4550EED02B5CD03600EB8101 /* GameOfLifeApp.swift */,
 				4550EED42B5CD03700EB8101 /* Assets.xcassets */,
@@ -136,6 +139,14 @@
 				4550EEFD2B5CD11700EB8101 /* WorldView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		45D2C4972B5DA0EB0018FBD9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				45D2C4982B5DA0F80018FBD9 /* WorldViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +282,7 @@
 				4550EEFE2B5CD11700EB8101 /* WorldView.swift in Sources */,
 				4550EED12B5CD03600EB8101 /* GameOfLifeApp.swift in Sources */,
 				4550EEFB2B5CD04900EB8101 /* CellView.swift in Sources */,
+				45D2C4992B5DA0F80018FBD9 /* WorldViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

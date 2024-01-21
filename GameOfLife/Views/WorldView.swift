@@ -6,141 +6,103 @@
 //
 
 import SwiftUI
-import Combine
 
 struct WorldView: View {
-    @State private var cells: [[Bool]]
-    @State private var generation = 0
-    
-    var gridDimension: Int
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init(gridDimension: Int = 25) {
-        self.gridDimension = gridDimension
-        cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
-    }
+    @State private var viewModel = WorldViewModel()
     
     var body: some View {
-        VStack(spacing: 1) {
-            Text("Generation: \(generation)").padding(10)
-            ForEach(0..<gridDimension, id: \.self) { row in
-                HStack(spacing: 1) {
-                    ForEach(0..<gridDimension, id: \.self) { column in
-                        CellView(isAlive: $cells[row][column])
-//                            .frame(width: cellSize, height: cellSize)
+        NavigationStack {
+            VStack(spacing: 1) {
+                Text("Generation: \(viewModel.generation)").padding(10)
+                    .foregroundColor(.grayText)
+                ForEach(0..<viewModel.gridDimension, id: \.self) { row in
+                    HStack(spacing: 1) {
+                        ForEach(0..<viewModel.gridDimension, id: \.self) { column in
+                            CellView(isAlive: $viewModel.cells[row][column])
+                        }
                     }
                 }
-            }
-            
-            // Controls
-            HStack {
-                Button("Reset") {
-                    cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
-                    generation = 0
-                }
-                .padding(10)
-                Button("Randomize") {
-                    cells = createRandomCells(gridDimension: gridDimension)
-                    generation = 0
-                }
-                .padding(10)
-                Spacer()
-//                Button("▶️") {
-//                     startTimerProgression()
-//                }
-//                .padding(10)
-//                Button("⏹️") {
-//                     stopTimerProgression()
-//                }
-//                .padding(10)
-                Button("Step Forward") {
-                    stepForward()
-                }
-                .padding(10)
-            }
-            
-        }
-        .aspectRatio(0.85, contentMode: .fit)
-        .onAppear {
-            cells = createRandomCells(gridDimension: gridDimension)
-        }
-    }
-    
-    private var cellSize: CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let padding = 1 // Adjust as needed
-        
-        return (screenWidth - CGFloat(padding * 2)) / CGFloat(gridDimension)
-    }
-    
-    private func stepForward() {
-        var newCells = cells
-        for row in 0..<gridDimension {
-            for column in 0..<gridDimension {
-                let adjacentCellCount = adjacentCellCountForRow(row, andColumn: column)
-                if cells[row][column] == true { // cell is alive
-                    // Any live cell with two to three neighbors survives.
-                    if adjacentCellCount < 2 || adjacentCellCount > 3 {
-                        newCells[row][column] = false // cell is dead
+                Spacer().frame(height: 10)
+                /// Controls
+                VStack {
+                    HStack {
+                        Button {
+                            viewModel.reset()
+                        } label: {
+                            Label("Reset", systemImage: "arrow.clockwise.circle")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .padding(.leading, 10)
+                        
+                        Spacer()
+                        
+                        Button {
+                            viewModel.randomReset()
+                        } label: {
+                            Label("Randomize", systemImage: "shuffle.circle")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .padding(.trailing, 10)
                     }
-                } else { // cell is dead
-                    // Any dead cell with three live neighbors becomes a live cell.
-                    if adjacentCellCount == 3 {
-                        newCells[row][column] = true // cell is alive
+                    // Automatic progression controls
+                    HStack {
+                        
+                        Button {
+                            viewModel.startAutomaticProgression()
+                        } label: {
+                            Label("Play", systemImage: "play.circle")
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(viewModel.isAutomaticallyProgressing ? .darkGreen : .accentColor)
+                        }
+                        .padding([.leading], 10)
+                        .buttonStyle(.bordered)
+                        
+                        Button {
+                            viewModel.stopAutomaticProgression()
+                        } label: {
+                            Label("Pause", systemImage: "pause.circle")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        
+                        Spacer()
+                        
+                        Button {
+                            viewModel.randomReset()
+                        } label: {
+                            Label("Step", systemImage: "playpause.circle")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .padding(.trailing, 10)
+                    }
+                    .padding([.top, .bottom], 5)
+                    
+                    // Speed controls
+                    HStack {
+                        VStack {
+                           
+                            Slider(value: $viewModel.timerSpeed, in: 1...10)
+                                .onChange(of: viewModel.timerSpeed) {
+                                    if viewModel.isAutomaticallyProgressing {
+                                        viewModel.restartAutomaticProgression()
+                                    }
+                                }
+                                .padding([.leading, .trailing])
+                            
+                            Text("Speed: \(Int(viewModel.timerSpeed))")
+                                .foregroundColor(.grayText)
+                        }
                     }
                 }
-            }
-        }
-        
-        cells = newCells
-        generation += 1
-    }
-    
-    private func adjacentCellCountForRow(_ row: Int, andColumn column: Int) -> Int {
-        var count = 0
-        for rowIndex in -1...1 {
-            for columnIndex in -1...1 {
-                let adjustedRow = row + rowIndex
-                let adjustedColumn = column + columnIndex
                 
-                if adjustedRow >= 0 && adjustedRow < gridDimension && adjustedColumn >= 0 && adjustedColumn < gridDimension {
-                    if cells[adjustedRow][adjustedColumn] && !(rowIndex == 0 && columnIndex == 0) {
-                        count += 1
-                    }
-                }
+                
             }
+            .navigationTitle("Game of Life")
         }
         
-        return count
-    }
-    
-    private func createRandomCells(gridDimension: Int) -> [[Bool]] {
-        var randomCells = [[Bool]]()
-        
-        for _ in 0..<gridDimension {
-            var row = [Bool]()
-            for _ in 0..<gridDimension {
-                row.append(Int.random(in: 0...1) == 1)
-            }
-            randomCells.append(row)
-        }
-        
-        return randomCells
-    }
-    
-    private mutating func startTimerProgression() {
-//        Timer.publish(every: 0.5, on: .main, in: .common)
-//            .autoconnect()
-//            .sink { [self] _ in
-//                self.stepForward()
-//            }
-//            .store(in: &cancellables)
-        
-    }
-    
-    private mutating func stopTimerProgression() {
-        cancellables.removeAll()
     }
 }
 
