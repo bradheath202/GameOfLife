@@ -25,6 +25,7 @@ struct WorldView: View {
             HStack {
                 Button("Reset") {
                     cells = Array(repeating: Array(repeating: false, count: 20), count: 20)
+                    generation = 0
                 }
                 .padding(10)
                 Spacer()
