@@ -50,21 +50,16 @@ struct WorldView: View {
                     HStack {
                         
                         Button {
-                            viewModel.startAutomaticProgression()
+                            viewModel.isAutomaticallyProgressing ?
+                            viewModel.stopAutomaticProgression() : viewModel.startAutomaticProgression()
                         } label: {
-                            Label("Play", systemImage: "play.circle")
+                            Label(viewModel.isAutomaticallyProgressing ? "Pause" : "Play", 
+                                  systemImage: viewModel.isAutomaticallyProgressing ?
+                                  "pause.circle" : "play.circle")
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(viewModel.isAutomaticallyProgressing ? .darkGreen : .accentColor)
                         }
                         .padding([.leading], 10)
-                        .buttonStyle(.bordered)
-                        
-                        Button {
-                            viewModel.stopAutomaticProgression()
-                        } label: {
-                            Label("Pause", systemImage: "pause.circle")
-                                .frame(maxWidth: .infinity)
-                        }
                         .buttonStyle(.bordered)
                         
                         Spacer()
@@ -75,10 +70,13 @@ struct WorldView: View {
                             Label("Step", systemImage: "playpause.circle")
                                 .frame(maxWidth: .infinity)
                         }
+                        .disabled(viewModel.isAutomaticallyProgressing)
                         .buttonStyle(.bordered)
                         .padding(.trailing, 10)
                     }
                     .padding([.top, .bottom], 5)
+                    
+                    Spacer()
                     
                     // Speed controls
                     HStack {
@@ -102,7 +100,6 @@ struct WorldView: View {
             }
             .navigationTitle("Game of Life")
         }
-        
     }
 }
 
