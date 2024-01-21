@@ -13,7 +13,7 @@ struct WorldView: View {
     
     var gridDimension: Int
     
-    init(gridDimension: Int = 50) {
+    init(gridDimension: Int = 40) {
         self.gridDimension = gridDimension
         cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
     }
@@ -25,9 +25,12 @@ struct WorldView: View {
                 HStack(spacing: 1) {
                     ForEach(0..<gridDimension, id: \.self) { column in
                         CellView(isAlive: $cells[row][column])
+                            .frame(width: cellSize, height: cellSize)
                     }
                 }
             }
+            
+            // Controls
             HStack {
                 Button("Reset") {
                     cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
@@ -48,6 +51,11 @@ struct WorldView: View {
             
         }
         .aspectRatio(1.0, contentMode: .fit)
+    }
+    
+    private var cellSize: CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
+        return screenWidth / CGFloat(gridDimension)
     }
     
     private func stepForward() {
