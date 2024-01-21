@@ -13,7 +13,7 @@ struct WorldView: View {
     
     var gridDimension: Int
     
-    init(gridDimension: Int = 10) {
+    init(gridDimension: Int = 50) {
         self.gridDimension = gridDimension
         cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
     }
@@ -30,12 +30,12 @@ struct WorldView: View {
             }
             HStack {
                 Button("Reset") {
-                    cells = Array(repeating: Array(repeating: false, count: 30), count: 30)
+                    cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
                     generation = 0
                 }
                 .padding(10)
                 Button("Randomize") {
-                    cells = createRandomCells(gridDimension: 30)
+                    cells = createRandomCells(gridDimension: gridDimension)
                     generation = 0
                 }
                 .padding(10)
