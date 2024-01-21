@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct WorldView: View {
-    let gridDimension = 20
-    @State private var cells = Array(repeating: Array(repeating: false, count: 20), count: 20)
+    @State private var cells: [[Bool]]
     @State private var generation = 0
+    
+    var gridDimension: Int
+    
+    init(gridDimension: Int = 10) {
+        self.gridDimension = gridDimension
+        cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
+    }
     
     var body: some View {
         VStack(spacing: 1) {
@@ -24,7 +30,12 @@ struct WorldView: View {
             }
             HStack {
                 Button("Reset") {
-                    cells = Array(repeating: Array(repeating: false, count: 20), count: 20)
+                    cells = Array(repeating: Array(repeating: false, count: 30), count: 30)
+                    generation = 0
+                }
+                .padding(10)
+                Button("Randomize") {
+                    cells = createRandomCells(gridDimension: 30)
                     generation = 0
                 }
                 .padding(10)
@@ -44,13 +55,15 @@ struct WorldView: View {
         for row in 0..<gridDimension {
             for column in 0..<gridDimension {
                 let adjacentCellCount = adjacentCellCountForRow(row, andColumn: column)
-                if cells[row][column] { // cell is alive
+                if cells[row][column] == true { // cell is alive
+                    // Any live cell with two to three neighbors survives.
                     if adjacentCellCount < 2 || adjacentCellCount > 3 {
                         newCells[row][column] = false // cell is dead
                     }
                 } else { // cell is dead
+                    // Any dead cell with three live neighbors becomes a live cell.
                     if adjacentCellCount == 3 {
-                        newCells[row][column] = true
+                        newCells[row][column] = true // cell is alive
                     }
                 }
             }
@@ -76,6 +89,20 @@ struct WorldView: View {
         }
         
         return count
+    }
+    
+    private func createRandomCells(gridDimension: Int) -> [[Bool]] {
+        var randomCells = [[Bool]]()
+        
+        for _ in 0..<gridDimension {
+            var row = [Bool]()
+            for _ in 0..<gridDimension {
+                row.append(Int.random(in: 0...1) == 1)
+            }
+            randomCells.append(row)
+        }
+        
+        return randomCells
     }
 }
 
