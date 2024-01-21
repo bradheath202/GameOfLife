@@ -70,7 +70,7 @@ struct WorldView: View {
                         Spacer()
                         
                         Button {
-                            viewModel.randomReset()
+                            viewModel.stepForward()
                         } label: {
                             Label("Step", systemImage: "playpause.circle")
                                 .frame(maxWidth: .infinity)
