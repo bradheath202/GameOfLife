@@ -12,11 +12,11 @@ struct WorldView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 2) {
+            VStack(spacing: 1) {
                 Text("Generation: \(viewModel.generation)").padding(10)
                     .foregroundColor(.grayText)
                 ForEach(0..<viewModel.gridDimension, id: \.self) { row in
-                    HStack(spacing: 2) {
+                    HStack(spacing: 1) {
                         ForEach(0..<viewModel.gridDimension, id: \.self) { column in
                             CellView(isAlive: $viewModel.cells[row][column])
                         }
@@ -34,6 +34,7 @@ struct WorldView: View {
                         }
                         .buttonStyle(.bordered)
                         .padding(.leading, 10)
+                        .padding(.trailing, 2.5)
                         
                         Spacer()
                         
@@ -45,6 +46,7 @@ struct WorldView: View {
                         }
                         .buttonStyle(.bordered)
                         .padding(.trailing, 10)
+                        .padding(.leading, 2.5)
                     }
                     // Automatic progression controls
                     HStack {
@@ -59,7 +61,9 @@ struct WorldView: View {
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(viewModel.isAutomaticallyProgressing ? .darkGreen : .accentColor)
                         }
-                        .padding([.leading], 10)
+                        .padding(.leading, 10)
+                        .padding(.trailing, 2.5)
+                        .animation(.easeInOut(duration: 0.15), value: viewModel.isAutomaticallyProgressing)
                         .buttonStyle(.bordered)
                         
                         Spacer()
@@ -71,8 +75,10 @@ struct WorldView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .disabled(viewModel.isAutomaticallyProgressing)
+                        .animation(.easeInOut(duration: 0.15), value: viewModel.isAutomaticallyProgressing)
                         .buttonStyle(.bordered)
                         .padding(.trailing, 10)
+                        .padding(.leading, 2.5)
                     }
                     .padding([.top, .bottom], 5)
                     
