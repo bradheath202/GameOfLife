@@ -12,11 +12,11 @@ struct WorldView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 1) {
+            VStack(spacing: 2) {
                 Text("Generation: \(viewModel.generation)").padding(10)
                     .foregroundColor(.grayText)
                 ForEach(0..<viewModel.gridDimension, id: \.self) { row in
-                    HStack(spacing: 1) {
+                    HStack(spacing: 2) {
                         ForEach(0..<viewModel.gridDimension, id: \.self) { column in
                             CellView(isAlive: $viewModel.cells[row][column])
                         }

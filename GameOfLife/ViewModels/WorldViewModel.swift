@@ -19,7 +19,7 @@ class WorldViewModel {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(gridDimension: Int = 25) {
+    init(gridDimension: Int = 30) {
         self.gridDimension = gridDimension
         cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
     }

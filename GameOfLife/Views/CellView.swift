@@ -13,10 +13,12 @@ struct CellView: View {
     var body: some View {
         Rectangle()
             .foregroundColor(isAlive ? .blue : .dead)
+            .animation(.easeInOut(duration: 0.15), value: isAlive)
             .aspectRatio(1.0, contentMode: .fit)
             .onTapGesture {
                 isAlive.toggle()
             }
+        
     }
 }
 
