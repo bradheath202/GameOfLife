@@ -16,6 +16,7 @@
 		4550EEFB2B5CD04900EB8101 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550EEFA2B5CD04900EB8101 /* CellView.swift */; };
 		4550EEFE2B5CD11700EB8101 /* WorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550EEFD2B5CD11700EB8101 /* WorldView.swift */; };
 		45D2C4992B5DA0F80018FBD9 /* WorldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D2C4982B5DA0F80018FBD9 /* WorldViewModel.swift */; };
+		45D2C49C2B5F40DF0018FBD9 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D2C49B2B5F40DF0018FBD9 /* Cell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		4550EEFA2B5CD04900EB8101 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		4550EEFD2B5CD11700EB8101 /* WorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldView.swift; sourceTree = "<group>"; };
 		45D2C4982B5DA0F80018FBD9 /* WorldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldViewModel.swift; sourceTree = "<group>"; };
+		45D2C49B2B5F40DF0018FBD9 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 		4550EECF2B5CD03600EB8101 /* GameOfLife */ = {
 			isa = PBXGroup;
 			children = (
+				45D2C49A2B5F40D10018FBD9 /* Models */,
 				45D2C4972B5DA0EB0018FBD9 /* ViewModels */,
 				4550EEFC2B5CD0F300EB8101 /* Views */,
 				4550EED02B5CD03600EB8101 /* GameOfLifeApp.swift */,
@@ -147,6 +150,14 @@
 				45D2C4982B5DA0F80018FBD9 /* WorldViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		45D2C49A2B5F40D10018FBD9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				45D2C49B2B5F40DF0018FBD9 /* Cell.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,6 +292,7 @@
 			files = (
 				4550EEFE2B5CD11700EB8101 /* WorldView.swift in Sources */,
 				4550EED12B5CD03600EB8101 /* GameOfLifeApp.swift in Sources */,
+				45D2C49C2B5F40DF0018FBD9 /* Cell.swift in Sources */,
 				4550EEFB2B5CD04900EB8101 /* CellView.swift in Sources */,
 				45D2C4992B5DA0F80018FBD9 /* WorldViewModel.swift in Sources */,
 			);

@@ -8,20 +8,24 @@
 import SwiftUI
 
 struct CellView: View {
-    @Binding var isAlive: Bool
+    @Binding var cell: Cell
     
     var body: some View {
         Rectangle()
-            .foregroundColor(isAlive ? .blue : .dead)
-            .animation(.easeInOut(duration: 0.15), value: isAlive)
+            .foregroundColor(cell.state == .alive ? .blue : .dead)
+            .animation(.easeInOut(duration: 0.15), value: cell.state)
             .aspectRatio(1.0, contentMode: .fit)
             .onTapGesture {
-                isAlive.toggle()
+                if cell.state == .alive {
+                    cell.state = .dead
+                } else {
+                    cell.state = .alive
+                }
             }
         
     }
 }
 
 #Preview {
-    CellView(isAlive: .constant(true))
+    CellView(cell: .constant(Cell()))
 }

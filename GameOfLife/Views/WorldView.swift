@@ -18,7 +18,7 @@ struct WorldView: View {
                 ForEach(0..<viewModel.gridDimension, id: \.self) { row in
                     HStack(spacing: 1) {
                         ForEach(0..<viewModel.gridDimension, id: \.self) { column in
-                            CellView(isAlive: $viewModel.cells[row][column])
+                            CellView(cell: $viewModel.cells[row][column])
                         }
                     }
                 }
@@ -39,7 +39,7 @@ struct WorldView: View {
                         Spacer()
                         
                         Button {
-                            viewModel.randomReset()
+                            viewModel.reset(randomize: true)
                         } label: {
                             Label("Randomize", systemImage: "shuffle.circle")
                                 .frame(maxWidth: .infinity)

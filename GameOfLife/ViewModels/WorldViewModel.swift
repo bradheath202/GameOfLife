@@ -10,7 +10,7 @@ import Combine
 
 @Observable
 class WorldViewModel {
-    var cells: [[Bool]]
+    var cells: [[Cell]]
     var gridDimension: Int
     
     var generation = 0
@@ -19,9 +19,9 @@ class WorldViewModel {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(gridDimension: Int = 3) {
+    init(gridDimension: Int = 20) {
         self.gridDimension = gridDimension
-        cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
+        cells = Array(repeating: Array(repeating: Cell(), count: gridDimension), count: gridDimension)
     }
     
     func adjacentLiveCellCountForRow(_ row: Int, andColumn column: Int) -> Int {
@@ -35,7 +35,8 @@ class WorldViewModel {
                 if adjustedRow >= 0 && adjustedRow < gridDimension && 
                     adjustedColumn >= 0 && adjustedColumn < gridDimension {
                     // Only count a cell if it is alive and isn't the current cell being evaluated
-                    if cells[adjustedRow][adjustedColumn] && (adjacentGridRowIndex != 0 || adjacentGridColumnIndex != 0) {
+                    if cells[adjustedRow][adjustedColumn].state == .alive &&
+                        (adjacentGridRowIndex != 0 || adjacentGridColumnIndex != 0) {
                         count += 1
                     }
                 }
@@ -54,15 +55,15 @@ extension WorldViewModel {
         for row in 0..<gridDimension {
             for column in 0..<gridDimension {
                 let adjacentCellCount = adjacentLiveCellCountForRow(row, andColumn: column)
-                if cells[row][column] == true { // cell is alive
+                if cells[row][column].state == .alive { // cell is alive
                     // Any live cell with two to three neighbors survives.
                     if adjacentCellCount < 2 || adjacentCellCount > 3 {
-                        newCells[row][column] = false // cell is dead
+                        newCells[row][column].state = .dead // cell is dead
                     }
                 } else { // cell is dead
                     // Any dead cell with three live neighbors becomes a live cell.
                     if adjacentCellCount == 3 {
-                        newCells[row][column] = true // cell is alive
+                        newCells[row][column].state = .alive // cell is alive
                     }
                 }
             }
@@ -72,28 +73,26 @@ extension WorldViewModel {
         generation += 1
     }
     
-    func reset() {
-        cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
-        generation = 0
-    }
-    
-    func randomReset() {
-        cells = createRandomCells(gridDimension: gridDimension)
-        generation = 0
-    }
-    
-    private func createRandomCells(gridDimension: Int) -> [[Bool]] {
-        var randomCells = [[Bool]]()
+    func reset(randomize: Bool = false) {
+        cells = []
         
+        var cellCount = 0
         for _ in 0..<gridDimension {
-            var row = [Bool]()
+            var cellRow = [Cell]()
             for _ in 0..<gridDimension {
-                row.append(Int.random(in: 0...1) == 1)
+                let cell: Cell
+                if randomize {
+                    cell = Cell(state: Cell.State.allCases.randomElement() ?? .dead)
+                } else {
+                    cell = Cell(state: .dead)
+                }
+                
+                cellRow.append(cell)
+                cellCount += 1
             }
-            randomCells.append(row)
+            cells.append(cellRow)
         }
-        
-        return randomCells
+        generation = 0
     }
     
     // Automatically update state at a varying rate
