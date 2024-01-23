@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Cell {
+struct Cell: Equatable {
     var state: State
 
     enum State: Int, CaseIterable {
@@ -17,5 +17,9 @@ struct Cell {
     
     init(state: State = .dead) {
         self.state = state
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.state == rhs.state
     }
 }

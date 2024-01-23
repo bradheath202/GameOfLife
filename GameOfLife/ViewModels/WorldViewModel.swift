@@ -73,6 +73,12 @@ extension WorldViewModel {
         generation += 1
     }
     
+    internal func stepForwardBy(_ multiple: Int) {
+        for _ in 0..<multiple {
+            stepForward()
+        }
+    }
+    
     func reset(randomize: Bool = false) {
         cells = []
         

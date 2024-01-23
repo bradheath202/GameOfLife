@@ -10,27 +10,57 @@ import XCTest
 
 final class GameOfLifeTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    /// Test the simplest oscillator - Blinker
+    func testBlinker() throws {
+        let blinkerCells = [
+            [Cell(), Cell(state: .alive), Cell()],
+            [Cell(), Cell(state: .alive), Cell()],
+            [Cell(), Cell(state: .alive), Cell()],
+        ]
+        
+        let blinkerCellsSteps = [
+            [Cell(), Cell(), Cell()],
+            [Cell(state: .alive), Cell(state: .alive), Cell(state: .alive)],
+            [Cell(), Cell(), Cell()],
+        ]
+        
+        let worldViewModel = WorldViewModel(gridDimension: blinkerCells.count)
+        
+        worldViewModel.cells = blinkerCells
+        worldViewModel.stepForwardBy(11)
+        
+        XCTAssertEqual(worldViewModel.cells, blinkerCellsSteps)
+        
+        worldViewModel.stepForwardBy(19)
+        
+        XCTAssertEqual(worldViewModel.cells, blinkerCells)
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+       
+    /// Test the simplest spaceship - Glider
+    ///
+    /// After 4 iterations, this glider's initial shape will reappear, and it will be translated
+    /// down one row and over one column.
+    func testGlider() throws {
+        let gliderCells = [
+            [Cell(state: .alive), Cell(),               Cell(state: .alive), Cell()],
+            [Cell(),              Cell(state: .alive),  Cell(state: .alive), Cell()],
+            [Cell(),              Cell(state: .alive),  Cell(),              Cell()],
+            [Cell(),              Cell(),               Cell(),              Cell()]
+        ]
+        
+        let gliderCellsAfter4Steps = [
+            [Cell(),              Cell(),               Cell(),              Cell()],
+            [Cell(),              Cell(state: .alive),  Cell(),              Cell(state: .alive)],
+            [Cell(),              Cell(),               Cell(state: .alive), Cell(state: .alive)],
+            [Cell(),              Cell(),               Cell(state: .alive),              Cell()]
+        ]
+        
+        let worldViewModel = WorldViewModel(gridDimension: gliderCells.count)
+        
+        worldViewModel.cells = gliderCells
+        worldViewModel.stepForwardBy(4)
+        
+        XCTAssertEqual(worldViewModel.cells, gliderCellsAfter4Steps)
     }
 
 }
