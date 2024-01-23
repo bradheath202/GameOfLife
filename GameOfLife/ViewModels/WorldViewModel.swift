@@ -19,7 +19,7 @@ class WorldViewModel {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(gridDimension: Int = 20) {
+    init(gridDimension: Int = 25) {
         self.gridDimension = gridDimension
         cells = Array(repeating: Array(repeating: Cell(), count: gridDimension), count: gridDimension)
     }
@@ -31,8 +31,8 @@ class WorldViewModel {
                 let adjustedRow = row + adjacentGridRowIndex
                 let adjustedColumn = column + adjacentGridColumnIndex
                 
-                // Only include cells within the world
-                if adjustedRow >= 0 && adjustedRow < gridDimension && 
+                // Only include cells within the world grid
+                if adjustedRow >= 0 && adjustedRow < gridDimension &&
                     adjustedColumn >= 0 && adjustedColumn < gridDimension {
                     // Only count a cell if it is alive and isn't the current cell being evaluated
                     if cells[adjustedRow][adjustedColumn].state == .alive &&
@@ -48,8 +48,9 @@ class WorldViewModel {
 }
 
 /// Actions
-
 extension WorldViewModel {
+    
+    /// Evaluates and increments the step / generation.
     func stepForward() {
         var newCells = cells
         for row in 0..<gridDimension {
@@ -73,12 +74,16 @@ extension WorldViewModel {
         generation += 1
     }
     
-    internal func stepForwardBy(_ multiple: Int) {
+    /// Increments the step / generation by the provided multiple.
+    /// - Parameters:
+    ///     - multiple: An integer value indicating the number of steps / generations to increment.
+    func stepForwardBy(_ multiple: Int) {
         for _ in 0..<multiple {
             stepForward()
         }
     }
     
+    /// Reset World grid
     func reset(randomize: Bool = false) {
         cells = []
         
@@ -101,7 +106,7 @@ extension WorldViewModel {
         generation = 0
     }
     
-    // Automatically update state at a varying rate
+    /// Automatically update state with a user-selectable rate
     func startAutoStepping() {
         isAutoStepOn = true
         Timer.publish(every: 1.0 / timerSpeed, on: .main, in: .common)
@@ -110,14 +115,15 @@ extension WorldViewModel {
                 self?.stepForward()
             }
             .store(in: &cancellables)
-        
     }
     
+    /// Stop automatic stepping
     func stopAutoStepping() {
         isAutoStepOn = false
         cancellables.removeAll()
     }
     
+    /// Restart automatic stepping
     func restartAutoStepping() {
         stopAutoStepping()
         startAutoStepping()

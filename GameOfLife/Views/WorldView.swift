@@ -22,8 +22,10 @@ struct WorldView: View {
                         }
                     }
                 }
+                
                 Spacer().frame(height: 10)
-                /// Controls
+                
+                // Controls
                 VStack {
                     HStack {
                         Button {
@@ -48,12 +50,13 @@ struct WorldView: View {
                         .padding(.trailing, 10)
                         .padding(.leading, 2.5)
                     }
+                    
                     // Automatic progression controls
                     HStack {
-                        
                         Button {
                             viewModel.isAutoStepOn ?
-                            viewModel.stopAutoStepping() : viewModel.startAutoStepping()
+                            viewModel.stopAutoStepping() : 
+                            viewModel.startAutoStepping()
                         } label: {
                             Label(viewModel.isAutoStepOn ? "Pause" : "Play",
                                   systemImage: viewModel.isAutoStepOn ?
@@ -83,6 +86,7 @@ struct WorldView: View {
                     .padding([.top, .bottom], 5)
                     
                     Spacer()
+                        .frame(height: 15)
                     
                     // Speed controls
                     HStack {
@@ -102,7 +106,7 @@ struct WorldView: View {
                     }
                 }
                 
-                
+                Spacer()
             }
             .navigationTitle("Game of Life")
         }
