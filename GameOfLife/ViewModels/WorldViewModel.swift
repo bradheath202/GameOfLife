@@ -11,29 +11,31 @@ import Combine
 @Observable
 class WorldViewModel {
     var cells: [[Bool]]
+    var gridDimension: Int
     
     var generation = 0
-    var gridDimension: Int
     var timerSpeed = 5.5
-    var isAutomaticallyProgressing = false
+    var isAutoStepOn = false
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(gridDimension: Int = 30) {
+    init(gridDimension: Int = 3) {
         self.gridDimension = gridDimension
         cells = Array(repeating: Array(repeating: false, count: gridDimension), count: gridDimension)
     }
     
-    func adjacentCellCountForRow(_ row: Int, andColumn column: Int) -> Int {
+    func adjacentLiveCellCountForRow(_ row: Int, andColumn column: Int) -> Int {
         var count = 0
-        for rowIndex in -1...1 { // Row above, current row, row below
-            for columnIndex in -1...1 { // Column to the left, current column, column to the right
-                let adjustedRow = row + rowIndex
-                let adjustedColumn = column + columnIndex
+        for adjacentGridRowIndex in -1...1 { // Row above, current row, row below
+            for adjacentGridColumnIndex in -1...1 { // Column to the left, current column, column to the right
+                let adjustedRow = row + adjacentGridRowIndex
+                let adjustedColumn = column + adjacentGridColumnIndex
                 
                 // Only include cells within the world
-                if adjustedRow >= 0 && adjustedRow < gridDimension && adjustedColumn >= 0 && adjustedColumn < gridDimension {
-                    if cells[adjustedRow][adjustedColumn] && (rowIndex != 0 || columnIndex != 0) {
+                if adjustedRow >= 0 && adjustedRow < gridDimension && 
+                    adjustedColumn >= 0 && adjustedColumn < gridDimension {
+                    // Only count a cell if it is alive and isn't the current cell being evaluated
+                    if cells[adjustedRow][adjustedColumn] && (adjacentGridRowIndex != 0 || adjacentGridColumnIndex != 0) {
                         count += 1
                     }
                 }
@@ -51,7 +53,7 @@ extension WorldViewModel {
         var newCells = cells
         for row in 0..<gridDimension {
             for column in 0..<gridDimension {
-                let adjacentCellCount = adjacentCellCountForRow(row, andColumn: column)
+                let adjacentCellCount = adjacentLiveCellCountForRow(row, andColumn: column)
                 if cells[row][column] == true { // cell is alive
                     // Any live cell with two to three neighbors survives.
                     if adjacentCellCount < 2 || adjacentCellCount > 3 {
@@ -95,8 +97,8 @@ extension WorldViewModel {
     }
     
     // Automatically update state at a varying rate
-    func startAutomaticProgression() {
-        isAutomaticallyProgressing = true
+    func startAutoStepping() {
+        isAutoStepOn = true
         Timer.publish(every: 1.0 / timerSpeed, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
@@ -106,13 +108,13 @@ extension WorldViewModel {
         
     }
     
-    func stopAutomaticProgression() {
-        isAutomaticallyProgressing = false
+    func stopAutoStepping() {
+        isAutoStepOn = false
         cancellables.removeAll()
     }
     
-    func restartAutomaticProgression() {
-        stopAutomaticProgression()
-        startAutomaticProgression()
+    func restartAutoStepping() {
+        stopAutoStepping()
+        startAutoStepping()
     }
 }

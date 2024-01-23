@@ -52,18 +52,18 @@ struct WorldView: View {
                     HStack {
                         
                         Button {
-                            viewModel.isAutomaticallyProgressing ?
-                            viewModel.stopAutomaticProgression() : viewModel.startAutomaticProgression()
+                            viewModel.isAutoStepOn ?
+                            viewModel.stopAutoStepping() : viewModel.startAutoStepping()
                         } label: {
-                            Label(viewModel.isAutomaticallyProgressing ? "Pause" : "Play", 
-                                  systemImage: viewModel.isAutomaticallyProgressing ?
+                            Label(viewModel.isAutoStepOn ? "Pause" : "Play",
+                                  systemImage: viewModel.isAutoStepOn ?
                                   "pause.circle" : "play.circle")
                                 .frame(maxWidth: .infinity)
-                                .foregroundColor(viewModel.isAutomaticallyProgressing ? .darkGreen : .accentColor)
+                                .foregroundColor(viewModel.isAutoStepOn ? .darkGreen : .accentColor)
                         }
                         .padding(.leading, 10)
                         .padding(.trailing, 2.5)
-                        .animation(.easeInOut(duration: 0.15), value: viewModel.isAutomaticallyProgressing)
+                        .animation(.easeInOut(duration: 0.15), value: viewModel.isAutoStepOn)
                         .buttonStyle(.bordered)
                         
                         Spacer()
@@ -74,8 +74,8 @@ struct WorldView: View {
                             Label("Step", systemImage: "playpause.circle")
                                 .frame(maxWidth: .infinity)
                         }
-                        .disabled(viewModel.isAutomaticallyProgressing)
-                        .animation(.easeInOut(duration: 0.15), value: viewModel.isAutomaticallyProgressing)
+                        .disabled(viewModel.isAutoStepOn)
+                        .animation(.easeInOut(duration: 0.15), value: viewModel.isAutoStepOn)
                         .buttonStyle(.bordered)
                         .padding(.trailing, 10)
                         .padding(.leading, 2.5)
@@ -90,8 +90,8 @@ struct WorldView: View {
                            
                             Slider(value: $viewModel.timerSpeed, in: 1...10)
                                 .onChange(of: viewModel.timerSpeed) {
-                                    if viewModel.isAutomaticallyProgressing {
-                                        viewModel.restartAutomaticProgression()
+                                    if viewModel.isAutoStepOn {
+                                        viewModel.restartAutoStepping()
                                     }
                                 }
                                 .padding([.leading, .trailing])
