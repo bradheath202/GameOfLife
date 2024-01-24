@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct WorldView: View {
+    @Environment(\.scenePhase) var scenePhase
+    
     @State private var viewModel = WorldViewModel()
     
     var body: some View {
@@ -109,6 +111,35 @@ struct WorldView: View {
                 Spacer()
             }
             .navigationTitle("Game of Life")
+//            .navigationBarItems(
+//                trailing: 
+//                    HStack {
+//                        Button("", systemImage: "square.and.arrow.up") {
+//                            // TODO: load
+//                            print("==== load")
+//                        }
+//                        VStack {
+//                            Spacer()
+//                                .frame(height: 4)
+//                            Button("", systemImage: "square.and.pencil") {
+//                                // TODO: save
+//                                print("==== save")
+//                            }
+//                        }
+//                    }
+//            )
+        }
+        .onChange(of: scenePhase) {
+            switch scenePhase {
+            case .background, .inactive:
+                print("=== background or inactive")
+                viewModel.stopAutoStepping()
+            case .active:
+                break
+            @unknown default:
+                break
+            }
+            
         }
     }
 }
